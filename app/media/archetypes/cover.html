@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <link rel="stylesheet" href="../../../platforms/{{platform}}/assets/themes/{{theme}}.css" />
+    <style>
+        :root {
+            --canvas-width: 1000px;
+            --canvas-height: 1000px;
+        }
+
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            width: var(--canvas-width);
+            height: var(--canvas-height);
+            background-color: var(--bg-main, #fff);
+            font-family: var(--cover-title-font, var(--font-main, sans-serif));
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* 装饰层 */
+        #svgLayer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        /* 核心视觉区 (Hero Zone) */
+        .cover-container {
+            position: relative;
+            z-index: 10;
+            height: 100%;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: var(--cover-hero-padding, 80px);
+            box-sizing: border-box;
+        }
+
+        .title {
+            font-size: var(--cover-title-size, 110px);
+            font-weight: 900;
+            line-height: 1.1;
+            color: var(--text-title, var(--primary-color));
+            margin: 0 0 var(--space-md, 40px) 0;
+            max-width: var(--cover-title-max-width, 90%);
+            word-break: break-word;
+        }
+
+        .summary {
+            font-size: var(--cover-summary-size, 42px);
+            line-height: 1.4;
+            color: var(--text-body, #666);
+            margin: 0;
+            font-weight: 500;
+            max-width: var(--cover-summary-width, 85%);
+            opacity: 0.9;
+        }
+
+        .branding {
+            position: absolute;
+            bottom: 60px;
+            left: var(--cover-hero-padding, 80px);
+            font-size: 24px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--primary-color);
+            opacity: 0.6;
+        }
+    </style>
+</head>
+
+<body class="archetype-cover" data-libs="gsap,svg">
+    <svg id="svgLayer"></svg>
+    <div class="cover-container">
+        <h1 class="title">{{title}}</h1>
+        <p class="summary">{{summary}}</p>
+        <div class="branding">{{branding}}</div>
+    </div>
+</body>
+
+</html>

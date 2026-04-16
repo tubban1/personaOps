@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <link rel="stylesheet" href="../../../platforms/{{platform}}/assets/themes/{{theme}}.css" />
+    <style>
+        :root {
+            --canvas-width: 1000px;
+            --canvas-height: 1000px;
+        }
+
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            width: var(--canvas-width);
+            min-height: var(--canvas-height);
+            background-color: var(--bg-main, #ffffff);
+            font-family: var(--font-main, sans-serif);
+            overflow: visible;
+        }
+
+        .data-card-container {
+            width: 100%;
+            min-height: 100%;
+            display: flex;
+            flex-direction: column;
+            padding: var(--content-padding, 60px);
+            box-sizing: border-box;
+            position: relative;
+            z-index: 10;
+        }
+
+        .header-group {
+            margin-bottom: 40px;
+        }
+
+        .title {
+            font-size: 64px;
+            font-weight: 900;
+            color: var(--text-title);
+            margin: 0;
+        }
+
+        .summary {
+            font-size: 28px;
+            opacity: 0.7;
+            margin: 10px 0 0 0;
+        }
+
+        /* 三区布局模式 */
+        .zones-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+            flex: 1;
+        }
+
+        /* 1. 图表区 (Visual Zone) */
+        .chart-zone {
+            flex: 2;
+            min-height: 400px;
+            background: var(--chart-surface-bg, var(--bg-surface, rgba(0, 0, 0, 0.03)));
+            border-radius: 24px;
+            padding: 40px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        /* 2. 指标区 (Stats Zone) */
+        .stats-zone {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .stat-card {
+            background: var(--bg-surface, rgba(0, 0, 0, 0.02));
+            padding: 24px;
+            border-radius: 16px;
+            border-bottom: 4px solid var(--primary-color);
+        }
+
+        .stat-value {
+            font-size: var(--stats-value-size, 64px);
+            font-weight: 800;
+            color: var(--primary-color);
+            display: block;
+            line-height: 1.1;
+        }
+
+        .stat-label {
+            font-size: 24px;
+            opacity: 0.6;
+            margin-top: 8px;
+            font-weight: 600;
+        }
+
+        /* 3. 说明区 (Text Zone) */
+        .text-zone {
+            font-size: 28px;
+            line-height: 1.6;
+            color: var(--text-body);
+            padding: 20px 10px;
+            border-top: 1px dashed rgba(0, 0, 0, 0.1);
+        }
+
+        #svgLayer,
+        #d3Layer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .title:empty,
+        .summary:empty,
+        .stats-zone:empty,
+        .text-zone:empty {
+            display: none !important;
+        }
+    </style>
+</head>
+
+<body class="archetype-data-card" data-libs="gsap,svg,d3,echarts,chartjs">
+    <svg id="svgLayer"></svg>
+    <div class="data-card-container">
+        <div class="header-group">
+            <h1 class="title">{{title}}</h1>
+            <p class="summary">{{summary}}</p>
+        </div>
+
+        <div class="zones-wrapper">
+            <div class="chart-zone">
+                {{blocks}}
+            </div>
+
+            <!-- 预留给后续动态内容增强的挂载点 -->
+            <div class="stats-zone" id="statsZone"></div>
+            <div class="text-zone" id="textZone"></div>
+        </div>
+
+        <footer style="margin-top: 40px; font-size: 20px; opacity: 0.4; font-weight: 700; letter-spacing: 1px;">
+            {{branding}} DATA ENGINE
+        </footer>
+    </div>
+</body>
+
+</html>

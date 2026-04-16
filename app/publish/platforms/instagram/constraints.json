@@ -1,0 +1,19 @@
+{
+  "display_name": "Instagram",
+  "title_max_chars": 80,
+  "caption_max_chars": 2200,
+  "preferred_caption_chars": 900,
+  "material_rules": [
+    "图片应具备较强审美一致性，避免信息堆砌",
+    "封面和正文风格要统一，优先干净、简洁、视觉明确的素材",
+    "正常场景下优先单一视觉主题，不要像宣传单"
+  ],
+  "publish_rules": [
+    "caption 不能超过2200字符",
+    "正常内容不宜过长，优先2到3个短段落",
+    "整体语气自然、克制、适合视觉型社交平台",
+    "不要把主题原文直接照搬为最终 caption"
+  ],
+  "generation_rules": "输出一篇适合 Instagram 发布的完整 caption。开头要抓人，但整体保持简洁、自然、审美化、易扫读。正文通常2到3个短段落即可，最后附一组干净的 hashtags。",
+  "prohibited_rules": "不要机械复述用户原话，不要写成说明书，不要无节制拉长。正常内容不宜过长，优先保证节奏和可读性。"
+}
