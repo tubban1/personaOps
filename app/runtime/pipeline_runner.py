@@ -47,11 +47,13 @@ class PipelineRunner:
             
             record = PipelineRunRecord(
                 id=run_id, persona_id=persona.id, brand_id=brand.id,
-                channel_id=channel.id, mode=mode, mock_mode=self.mock_mode, status="running"
+                channel_id=channel.id, platform=channel.platform, 
+                account_id=channel.account_id, mode=mode, 
+                mock_mode=self.mock_mode, status="running"
             )
         except Exception as e:
             logger.error(f"Initialization Error: {e}")
-            return PipelineRunRecord(id=run_id, persona_id="error", brand_id="error", channel_id="error", mode=mode, status="failed", error=str(e))
+            return PipelineRunRecord(id=run_id, persona_id="error", brand_id="error", channel_id="error", platform="error", account_id="error", mode=mode, status="failed", error=str(e))
 
         # 2. 逻辑执行 (V6.1: 真正可独立运行的 Mode)
         try:

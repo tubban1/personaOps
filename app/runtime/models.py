@@ -12,7 +12,9 @@ class PipelineRunRecord:
     persona_id: str
     brand_id: str
     channel_id: str
-    mode: str # plan, media, publish, full
+    mode: str  # plan, media, publish, full
+    platform: Optional[str] = None
+    account_id: Optional[str] = None
     status: str = "pending" # pending, running, success, failed
     mock_mode: bool = True
     

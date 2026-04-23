@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PersonaOps Console | Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0f172a;
+            --card: #1e293b;
+            --accent: #38bdf8;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --text: #f1f5f9;
+            --text-muted: #94a3b8;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
+            line-height: 1.5;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 1rem;
+        }
+
+        h1 {
+            font-weight: 700;
+            letter-spacing: -0.025em;
+            font-size: 1.5rem;
+        }
+
+        .version {
+            font-family: 'JetBrains Mono';
+            font-size: 0.8rem;
+            color: var(--accent);
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+
+        .card {
+            background: var(--card);
+            border-radius: 12px;
+            padding: 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: transform 0.2s;
+        }
+
+        .card:hover {
+            border-color: var(--accent);
+        }
+
+        .run-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+
+        .run-id {
+            font-family: 'JetBrains Mono';
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: var(--accent);
+        }
+
+        .badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .badge-success {
+            background: rgba(16, 185, 129, 0.2);
+            color: var(--success);
+        }
+
+        .badge-partial {
+            background: rgba(245, 158, 11, 0.2);
+            color: var(--warning);
+        }
+
+        .badge-mock {
+            border: 1px solid var(--text-muted);
+            color: var(--text-muted);
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            font-size: 0.875rem;
+        }
+
+        .info-item label {
+            display: block;
+            color: var(--text-muted);
+            font-size: 0.75rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .info-item span {
+            font-weight: 500;
+        }
+
+        .asset-preview {
+            margin-top: 1rem;
+            display: flex;
+            gap: 0.5rem;
+            overflow-x: auto;
+            padding-bottom: 0.5rem;
+        }
+
+        .asset-preview img {
+            height: 100px;
+            border-radius: 6px;
+            background: #000;
+        }
+
+        button {
+            background: var(--accent);
+            color: var(--bg);
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 0.875rem;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 6px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <div>
+                <h1>PersonaOps Console</h1>
+                <p class="version">V7.1-STABLE // OBSERVABILITY ENGINE</p>
+            </div>
+            <button onclick="loadRuns()">Refresh Dashboard</button>
+        </header>
+
+        <div id="runs-list" class="dashboard-grid">
+            <p>Loading run history...</p>
+        </div>
+    </div>
+
+    <script>
+        async function loadRuns() {
+            const container = document.getElementById('runs-list');
+            try {
+                const response = await fetch('/api/dashboard/runs');
+                const runs = await response.json();
+
+                if (runs.length === 0) {
+                    container.innerHTML = '<p>No runs found in data/audit.</p>';
+                    return;
+                }
+
+                container.innerHTML = runs.map(run => `
+                    <div class="card">
+                        <div class="run-header">
+                            <div>
+                                <span class="run-id">${run.run_id}</span>
+                                <span class="badge ${run.mock_mode ? 'badge-mock' : 'badge-success'}">${run.mock_mode ? 'MOCK' : 'REAL'}</span>
+                                <span class="badge ${run.health === 'complete' ? 'badge-success' : 'badge-partial'}">${run.health}</span>
+                            </div>
+                            <span class="badge badge-success">${run.status}</span>
+                        </div>
+                        <div class="info-grid">
+                            <div class="info-item">
+                                <label>PLATFORM</label>
+                                <span>${run.platform || 'N/A'}</span>
+                            </div>
+                            <div class="info-item">
+                                <label>ACCOUNT</label>
+                                <span>${run.account_id || 'N/A'}</span>
+                            </div>
+                            <div class="info-item">
+                                <label>STARTED</label>
+                                <span>${new Date(run.started_at).toLocaleString()}</span>
+                            </div>
+                            <div class="info-item">
+                                <label>ITEMS</label>
+                                <span>Plans: ${run.counts.post_plans} | Media: ${run.counts.media_packages}</span>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            } catch (error) {
+                container.innerHTML = '<p style="color: var(--danger)">Connection Error: API server not responding.</p>';
+                console.error(error);
+            }
+        }
+
+        loadRuns();
+        setInterval(loadRuns, 10000);
+    </script>
+</body>
+
+</html>
